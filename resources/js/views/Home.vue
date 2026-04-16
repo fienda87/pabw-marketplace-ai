@@ -188,7 +188,7 @@ const handleSearch = async () => {
 };
 
 const addToCart = async (product) => {
-  if (!authState.isAuthenticated) {
+  if (!authState.isAuthenticated || !authState.token) {
     router.push('/login');
     return;
   }

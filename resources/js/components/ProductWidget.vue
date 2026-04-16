@@ -41,7 +41,8 @@ const formatPrice = (price) => {
 };
 
 const handleAddToCart = async () => {
-  if (!authState.isAuthenticated) {
+  if (!authState.isAuthenticated || !authState.token) {
+    console.log('Guest user, redirecting to login');
     router.push('/login');
     return;
   }

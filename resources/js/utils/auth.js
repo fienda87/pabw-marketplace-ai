@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { reactive } from 'vue';
 
+const token = localStorage.getItem('token');
 export const authState = reactive({
     user: null,
-    token: localStorage.getItem('token') || null,
-    isAuthenticated: !!localStorage.getItem('token')
+    token: token && token !== 'null' && token !== 'undefined' ? token : null,
+    isAuthenticated: !!(token && token !== 'null' && token !== 'undefined')
 });
 
 if (authState.token) {
