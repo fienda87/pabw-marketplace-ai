@@ -28,10 +28,14 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'confirmed', Password::defaults()],
+            'address' => ['nullable', 'string', 'max:500'],
+            'phone_number' => ['nullable', 'string', 'max:20'],
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
+        $user->address = $validated['address'] ?? $user->address;
+        $user->phone_number = $validated['phone_number'] ?? $user->phone_number;
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
