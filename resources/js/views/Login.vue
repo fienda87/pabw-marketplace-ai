@@ -61,7 +61,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '../utils/auth';
+import { login, isAdmin } from '../utils/auth';
 
 const router = useRouter();
 const loading = ref(false);
@@ -77,7 +77,12 @@ const handleLogin = async () => {
   error.value = '';
   const result = await login(form);
   if (result.success) {
-    router.push('/');
+    // Redirect based on user role
+    if (isAdmin.value) {
+      router.push('/admin');
+    } else {
+      router.push('/');
+    }
   } else {
     error.value = result.message;
   }
