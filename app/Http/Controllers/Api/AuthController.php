@@ -22,6 +22,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'is_admin' => false,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -29,6 +30,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'is_admin' => $user->is_admin,
+            'user' => $user
         ]);
     }
 
@@ -52,6 +55,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
+            'is_admin' => $user->is_admin,
+            'user' => $user
         ]);
     }
 
