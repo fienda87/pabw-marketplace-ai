@@ -50,6 +50,24 @@
               />
             </div>
           </div>
+          <div class="space-y-2">
+            <label class="text-sm font-bold text-zinc-400 uppercase tracking-wider">Nomor Telepon</label>
+            <input 
+              v-model="editForm.phone"
+              type="tel" 
+              placeholder="Contoh: 081234567890"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-600 transition-colors"
+            />
+          </div>
+          <div class="space-y-2">
+            <label class="text-sm font-bold text-zinc-400 uppercase tracking-wider">Alamat Lengkap</label>
+            <textarea 
+              v-model="editForm.address"
+              rows="3"
+              placeholder="Masukkan alamat lengkap untuk pengiriman"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-600 transition-colors resize-none"
+            ></textarea>
+          </div>
           <div class="flex justify-end">
             <button 
               type="submit"
@@ -60,6 +78,27 @@
             </button>
           </div>
         </form>
+      </div>
+
+      <!-- Display Additional Info -->
+      <div v-if="!isEditing" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 space-y-6">
+        <h3 class="text-xl font-bold text-white border-b border-zinc-800 pb-4">Informasi Kontak</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start gap-4">
+            <Phone class="text-red-600 w-5 h-5 mt-1 flex-shrink-0" />
+            <div>
+              <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Nomor Telepon</p>
+              <p class="text-white">{{ editForm.phone || 'Belum diatur' }}</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 md:col-span-2">
+            <MapPin class="text-red-600 w-5 h-5 mt-1 flex-shrink-0" />
+            <div>
+              <p class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-1">Alamat</p>
+              <p class="text-white">{{ editForm.address || 'Belum diatur' }}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Stats -->
@@ -84,7 +123,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { authState, fetchUser } from '../utils/auth';
-import { Loader2 } from 'lucide-vue-next';
+import { Loader2, Phone, MapPin } from 'lucide-vue-next';
 import axios from 'axios';
 
 const loading = ref(true);
@@ -94,7 +133,9 @@ const stats = ref({});
 
 const editForm = reactive({
   name: '',
-  email: ''
+  email: '',
+  phone: '',
+  address: ''
 });
 
 const loadProfileData = async () => {
@@ -103,6 +144,8 @@ const loadProfileData = async () => {
   if (authState.user) {
     editForm.name = authState.user.name;
     editForm.email = authState.user.email;
+    editForm.phone = authState.user.phone || '';
+    editForm.address = authState.user.address || '';
     
     // Fetch stats (mocked if not available or combine from other APIs)
     try {

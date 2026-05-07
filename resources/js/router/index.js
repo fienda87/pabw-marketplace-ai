@@ -4,6 +4,7 @@ import Chat from '../views/Chat.vue';
 import Cart from '../views/Cart.vue';
 import Orders from '../views/Orders.vue';
 import OrderDetails from '../views/OrderDetails.vue';
+import Delivery from '../views/Delivery.vue';
 import Wishlist from '../views/Wishlist.vue';
 import Notifications from '../views/Notifications.vue';
 import ProductDetail from '../views/ProductDetail.vue';
@@ -32,6 +33,7 @@ const routes = [
   { path: '/product/:id', name: 'ProductDetail', component: ProductDetail },
   { path: '/orders', name: 'Orders', component: Orders, meta: { requiresAuth: true } },
   { path: '/orders/:id', name: 'OrderDetails', component: OrderDetails, meta: { requiresAuth: true } },
+  { path: '/delivery', name: 'Delivery', component: Delivery, meta: { requiresAuth: true } },
   { path: '/profile', name: 'Profile', component: Profile, meta: { requiresAuth: true } },
   { path: '/settings', name: 'Settings', component: Settings },
   { path: '/login', name: 'Login', component: Login, meta: { guestOnly: true, hideSidebar: true } },

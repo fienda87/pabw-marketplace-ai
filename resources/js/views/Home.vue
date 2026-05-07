@@ -37,6 +37,25 @@
       </div>
     </div>
 
+    <!-- Category Filter Bar -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+      <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        <button 
+          v-for="category in categories"
+          :key="category.id"
+          @click="filterByCategory(category.id)"
+          :class="[
+            'px-6 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all flex-shrink-0',
+            selectedCategory === category.id 
+              ? 'bg-red-600 text-white shadow-lg shadow-red-600/30' 
+              : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'
+          ]"
+        >
+          {{ category.name }}
+        </button>
+      </div>
+    </div>
+
     <!-- Product Showcase -->
     <div v-if="loading" class="flex justify-center py-20">
       <Loader2 class="w-10 h-10 animate-spin text-red-600" />
@@ -55,7 +74,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div 
-            v-for="product in products" 
+            v-for="product in displayedProducts" 
             :key="product.id"
             class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-red-600/50 transition-all group shadow-xl hover:shadow-red-600/5"
           >
@@ -168,9 +187,29 @@ const router = useRouter();
 const searchQuery = ref('');
 const products = ref([]);
 const loading = ref(true);
+const categories = ref([
+  { id: 'all', name: 'Semua' },
+  { id: 'keyboard', name: 'Keyboard' },
+  { id: 'mouse', name: 'Mouse' },
+  { id: 'headphone', name: 'Headset' },
+  { id: 'monitor', name: 'Monitor' },
+  { id: 'chair', name: 'Kursi Gaming' },
+  { id: 'accessories', name: 'Aksesoris' }
+]);
+const selectedCategory = ref('all');
 
 const keyboards = computed(() => {
   return products.value.filter(p => p.category?.name.toLowerCase().includes('keyboard'));
+});
+
+const displayedProducts = computed(() => {
+  if (selectedCategory.value === 'all') {
+    return products.value;
+  }
+  return products.value.filter(p => 
+    p.category?.name.toLowerCase().includes(selectedCategory.value) ||
+    p.name.toLowerCase().includes(selectedCategory.value)
+  );
 });
 
 const formatPrice = (price) => {
@@ -196,6 +235,10 @@ const fetchProducts = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const filterByCategory = (categoryId) => {
+  selectedCategory.value = categoryId;
 };
 
 const handleSearch = async () => {
